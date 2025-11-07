@@ -55,6 +55,8 @@ int     parse_floor_color(char *line, t_textures *tex);
 int     parse_ceiling_color(char *line, t_textures *tex);
 void    parse_map(t_game *game, char **file, int start);
 int     is_empty_line(char *line);
+void    find_player(t_game *game);
+void    validate_map(t_game *game);
 
 /* ========== UTILS ========== */
 void    error_exit(char *message);

@@ -12,6 +12,8 @@ SRC = $(SRC_DIR)/main.c \
       $(SRC_DIR)/parsing/parse_textures.c \
       $(SRC_DIR)/parsing/parse_colors.c \
       $(SRC_DIR)/parsing/parse_map.c \
+      $(SRC_DIR)/parsing/find_player.c \
+      $(SRC_DIR)/parsing/validate_map.c \
       $(SRC_DIR)/parsing/free_game.c \
       $(SRC_DIR)/utils/error.c \
       $(SRC_DIR)/utils/ft_strlen.c \

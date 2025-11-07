@@ -111,6 +111,12 @@ t_game *parse_file(char *filename)
     
     // Parser la map
     parse_map(game, file_content, i);
+
+    // Trouver et initialiser le joueur
+    find_player(game);
+
+    // Valider que la map est fermée
+    validate_map(game);
     
     printf("\n✅ All elements parsed successfully!\n\n");
 
