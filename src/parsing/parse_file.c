@@ -2,10 +2,10 @@
 
 static void init_game(t_game *game)
 {
-    game->textures.north = NULL;
-    game->textures.south = NULL;
-    game->textures.east = NULL;
-    game->textures.west = NULL;
+    game->textures.north_path = NULL;
+    game->textures.south_path = NULL;
+    game->textures.east_path = NULL;
+    game->textures.east_path = NULL;
     game->textures.floor_color = -1;
     game->textures.ceiling_color = -1;
     game->map.grid = NULL;
@@ -49,13 +49,13 @@ static int parse_element(char *line, t_game *game)
 
 static void check_all_elements(t_game *game)
 {
-    if (!game->textures.north)
+    if (!game->textures.north_path)
         error_exit("Missing NO (north) texture");
-    if (!game->textures.south)
+    if (!game->textures.south_path)
         error_exit("Missing SO (south) texture");
-    if (!game->textures.west)
+    if (!game->textures.west_path)
         error_exit("Missing WE (west) texture");
-    if (!game->textures.east)
+    if (!game->textures.east_path)
         error_exit("Missing EA (east) texture");
     if (game->textures.floor_color == -1)
         error_exit("Missing F (floor) color");

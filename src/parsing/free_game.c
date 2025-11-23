@@ -20,14 +20,14 @@ void free_game(t_game *game)
     if (!game)
         return;
     
-    if (game->textures.north)
-        free(game->textures.north);
-    if (game->textures.south)
-        free(game->textures.south);
-    if (game->textures.east)
-        free(game->textures.east);
-    if (game->textures.west)
-        free(game->textures.west);
+    if (game->textures.north_path)
+        free(game->textures.north_path);
+    if (game->textures.south_path)
+        free(game->textures.south_path);
+    if (game->textures.east_path)
+        free(game->textures.east_path);
+    if (game->textures.west_path)
+        free(game->textures.west_path);
     
     free_array(game->map.grid);
     

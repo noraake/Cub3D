@@ -33,52 +33,52 @@ static char *extract_path(char *line, int start)
 
 int parse_north_texture(char *line, t_textures *tex)
 {
-    if (tex->north != NULL)
+    if (tex->north_path != NULL)
         error_exit("Duplicate NO texture");
     
-    tex->north = extract_path(line, 2); // Skip "NO"
-    if (!tex->north)
+    tex->north_path = extract_path(line, 2);
+    if (!tex->north_path)
         error_exit("Invalid NO texture path");
     
-    printf("✓ North texture: %s\n", tex->north);
+    printf("✓ North texture: %s\n", tex->north_path);
     return (1);
 }
 
 int parse_south_texture(char *line, t_textures *tex)
 {
-    if (tex->south != NULL)
+    if (tex->south_path != NULL)
         error_exit("Duplicate SO texture");
     
-    tex->south = extract_path(line, 2); // Skip "SO"
-    if (!tex->south)
+    tex->south_path = extract_path(line, 2);
+    if (!tex->south_path)
         error_exit("Invalid SO texture path");
     
-    printf("✓ South texture: %s\n", tex->south);
+    printf("✓ South texture: %s\n", tex->south_path);
     return (1);
 }
 
 int parse_west_texture(char *line, t_textures *tex)
 {
-    if (tex->west != NULL)
+    if (tex->west_path != NULL)
         error_exit("Duplicate WE texture");
     
-    tex->west = extract_path(line, 2); // Skip "WE"
-    if (!tex->west)
+    tex->west_path = extract_path(line, 2);
+    if (!tex->west_path)
         error_exit("Invalid WE texture path");
     
-    printf("✓ West texture: %s\n", tex->west);
+    printf("✓ West texture: %s\n", tex->west_path);
     return (1);
 }
 
 int parse_east_texture(char *line, t_textures *tex)
 {
-    if (tex->east != NULL)
+    if (tex->east_path != NULL)
         error_exit("Duplicate EA texture");
     
-    tex->east = extract_path(line, 2); // Skip "EA"
-    if (!tex->east)
+    tex->east_path = extract_path(line, 2);
+    if (!tex->east_path)
         error_exit("Invalid EA texture path");
     
-    printf("✓ East texture: %s\n", tex->east);
+    printf("✓ East texture: %s\n", tex->east_path);
     return (1);
 }

@@ -3,6 +3,11 @@ NAME = cub3D
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
+# MinilibX
+MLX_DIR = minilibx-linux
+MLX_LIB = $(MLX_DIR)/libmlx.a
+MLX_FLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
+
 SRC_DIR = src
 OBJ_DIR = obj
 
@@ -15,26 +20,35 @@ SRC = $(SRC_DIR)/main.c \
       $(SRC_DIR)/parsing/find_player.c \
       $(SRC_DIR)/parsing/validate_map.c \
       $(SRC_DIR)/parsing/free_game.c \
+      $(SRC_DIR)/textures/load_textures.c \
+      $(SRC_DIR)/init/init_mlx.c \
       $(SRC_DIR)/utils/error.c \
       $(SRC_DIR)/utils/ft_strlen.c \
       $(SRC_DIR)/utils/ft_strdup.c \
       $(SRC_DIR)/utils/ft_strtrim.c \
       $(SRC_DIR)/utils/skip_spaces.c \
       $(SRC_DIR)/utils/is_empty_line.c
+      
 
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-all: $(NAME)
+all: $(MLX_LIB) $(NAME)
+
+$(MLX_LIB):
+	@echo "Compiling MinilibX..."
+	@make -C $(MLX_DIR)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) $(MLX_FLAGS) -o $(NAME)
+	@echo "✅ cub3D compiled successfully!"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -I$(MLX_DIR) -c $< -o $@
 
 clean:
 	rm -rf $(OBJ_DIR)
+	@make -C $(MLX_DIR) clean
 
 fclean: clean
 	rm -f $(NAME)

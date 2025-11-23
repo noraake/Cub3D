@@ -31,18 +31,29 @@ int main(int ac, char **av)
     if (ac != 2)
         error_exit("Usage: ./cub3D <map.cub>");
     
+    // Parser le fichier
     game = parse_file(av[1]);
     if (!game)
         return (1);
     
+    // Initialiser MLX
+    init_mlx(game);
+    
+    // Charger les textures
+    load_all_textures(game);
+    
     printf("\n========================================\n");
-    printf("✅ PARSING SUCCESSFUL!\n");
+    printf("✅ EVERYTHING LOADED SUCCESSFULLY!\n");
     printf("========================================\n");
     printf("\n=== TEXTURES ===\n");
-    printf("North: %s\n", game->textures.north);
-    printf("South: %s\n", game->textures.south);
-    printf("West:  %s\n", game->textures.west);
-    printf("East:  %s\n", game->textures.east);
+    printf("North: %s (%dx%d)\n", game->textures.north_path,
+           game->textures.north_img.width, game->textures.north_img.height);
+    printf("South: %s (%dx%d)\n", game->textures.south_path,
+           game->textures.south_img.width, game->textures.south_img.height);
+    printf("West:  %s (%dx%d)\n", game->textures.west_path,
+           game->textures.west_img.width, game->textures.west_img.height);
+    printf("East:  %s (%dx%d)\n", game->textures.east_path,
+           game->textures.east_img.width, game->textures.east_img.height);
     
     printf("\n=== COLORS ===\n");
     printf("Floor:   RGB(%d, %d, %d)\n",
@@ -59,6 +70,9 @@ int main(int ac, char **av)
     
     printf("\n========================================\n");
     
+    // Libérer tout
+    free_textures(game);
     free_game(game);
+    
     return (0);
 }
