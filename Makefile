@@ -27,8 +27,12 @@ SRC = $(SRC_DIR)/main.c \
       $(SRC_DIR)/utils/ft_strdup.c \
       $(SRC_DIR)/utils/ft_strtrim.c \
       $(SRC_DIR)/utils/skip_spaces.c \
-      $(SRC_DIR)/utils/is_empty_line.c
-      
+      $(SRC_DIR)/utils/is_empty_line.c\
+      $(SRC_DIR)/init/init_player.c\
+      $(SRC_DIR)/raycasting/raycasting.c\
+      $(SRC_DIR)/rendering/draw.c\
+      $(SRC_DIR)/rendering/render.c\
+      $(SRC_DIR)/events/keyboard.c\
 
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
