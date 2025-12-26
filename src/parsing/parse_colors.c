@@ -23,6 +23,41 @@ static int create_rgb(int r, int g, int b)
     return ((r << 16) | (g << 8) | b);
 }
 
+static int check_digit_sequence(char *line, int *i)
+{
+    int start;
+    int value;
+
+    start = *i;
+    if (line[*i] < '0' || line[*i] > '9')
+        error_exit("Invalid RGB format: expected digit");
+    while (line[*i] >= '0' && line[*i] <= '9')
+        (*i)++;
+    value = ft_atoi_color(&line[start]);
+    return (value);
+}
+
+static void check_comma(char *line, int *i)
+{
+    if (line[*i] != ',')
+        error_exit("Invalid RGB format: expected comma");
+    (*i)++;
+    if (line[*i] == ',')
+        error_exit("Invalid RGB format: multiple commas");
+    while (line[*i] == ' ' || line[*i] == '\t')
+        (*i)++;
+}
+
+static void check_end_of_rgb(char *line, int i)
+{
+    while (line[i])
+    {
+        if (line[i] != ' ' && line[i] != '\t' && line[i] != '\n' && line[i] != '\r')
+            error_exit("Invalid RGB format: unexpected characters after RGB values");
+        i++;
+    }
+}
+
 static int parse_rgb(char *line, int start)
 {
     int r;
@@ -31,30 +66,12 @@ static int parse_rgb(char *line, int start)
     int i;
 
     i = skip_spaces(line, start);
-    
-    // Parser R
-    r = ft_atoi_color(&line[i]);
-    while (line[i] >= '0' && line[i] <= '9')
-        i++;
-    
-    // Vérifier virgule
-    if (line[i] != ',')
-        error_exit("Invalid RGB format (missing comma after R)");
-    i++;
-    
-    // Parser G
-    g = ft_atoi_color(&line[i]);
-    while (line[i] >= '0' && line[i] <= '9')
-        i++;
-    
-    // Vérifier virgule
-    if (line[i] != ',')
-        error_exit("Invalid RGB format (missing comma after G)");
-    i++;
-    
-    // Parser B
-    b = ft_atoi_color(&line[i]);
-    
+    r = check_digit_sequence(line, &i);
+    check_comma(line, &i);
+    g = check_digit_sequence(line, &i);
+    check_comma(line, &i);
+    b = check_digit_sequence(line, &i);
+    check_end_of_rgb(line, i);
     return (create_rgb(r, g, b));
 }
 
@@ -63,7 +80,7 @@ int parse_floor_color(char *line, t_textures *tex)
     if (tex->floor_color != -1)
         error_exit("Duplicate F (floor) color");
     
-    tex->floor_color = parse_rgb(line, 1); // Skip "F"
+    tex->floor_color = parse_rgb(line, 1);
     
     printf("✓ Floor color: %d (RGB: %d,%d,%d)\n", 
            tex->floor_color,
@@ -78,7 +95,7 @@ int parse_ceiling_color(char *line, t_textures *tex)
     if (tex->ceiling_color != -1)
         error_exit("Duplicate C (ceiling) color");
     
-    tex->ceiling_color = parse_rgb(line, 1); // Skip "C"
+    tex->ceiling_color = parse_rgb(line, 1);
     
     printf("✓ Ceiling color: %d (RGB: %d,%d,%d)\n", 
            tex->ceiling_color,

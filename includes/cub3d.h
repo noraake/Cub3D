@@ -33,13 +33,13 @@ typedef struct s_keys
 
 typedef struct s_img
 {
-    void    *img_ptr;       // Pointeur vers l'image MLX
-    char    *addr;          // Adresse des données de l'image
-    int     width;          // Largeur de l'image
-    int     height;         // Hauteur de l'image
-    int     bits_per_pixel; // Bits par pixel
-    int     line_length;    // Longueur d'une ligne
-    int     endian;         // Endianness
+    void    *img_ptr;
+    char    *addr;
+    int     width;
+    int     height;
+    int     bits_per_pixel; 
+    int     line_length;
+    int     endian;
 }   t_img;
 
 typedef struct s_map
@@ -54,17 +54,19 @@ typedef struct s_player
     double  pos_x;
     double  pos_y;
     double  angle;
+    double  dir_x;
+    double  dir_y;
     double  fov;
     char    orientation;
 }   t_player;
 
 typedef struct s_textures
 {
-    char    *north_path;     // Renommer pour clarifier
+    char    *north_path;
     char    *south_path;
     char    *east_path;
     char    *west_path;
-    t_img   north_img;       // Ajouter les images
+    t_img   north_img;
     t_img   south_img;
     t_img   east_img;
     t_img   west_img;
@@ -74,7 +76,7 @@ typedef struct s_textures
 
 typedef struct s_game
 {
-    void        *mlx;        // Ajouter le pointeur MLX
+    void        *mlx;
     void        *win;
     t_img       img;
     t_map       map;
