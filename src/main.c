@@ -1,29 +1,5 @@
 #include "../includes/cub3d.h"
 
-static void print_map(t_game *game)
-{
-    int i;
-
-    printf("\n=== FINAL MAP ===\n");
-    printf("Size: %d x %d\n", game->map.width, game->map.height);
-    i = 0;
-    while (i < game->map.height)
-    {
-        printf("%s\n", game->map.grid[i]);
-        i++;
-    }
-}
-
-static void print_player_info(t_game *game)
-{
-    printf("\n=== PLAYER INFO ===\n");
-    printf("Position: (%.2f, %.2f)\n", 
-           game->player.pos_x, game->player.pos_y);
-    printf("Orientation: %c\n", game->player.orientation);
-    printf("Direction vector: (%.1f, %.1f)\n", 
-           game->player.dir_x, game->player.dir_y);
-}
-
 int main(int ac, char **av)
 {
     t_game *game;
@@ -31,48 +7,33 @@ int main(int ac, char **av)
     if (ac != 2)
         error_exit("Usage: ./cub3D <map.cub>");
     
-    // Parser le fichier
     game = parse_file(av[1]);
     if (!game)
         return (1);
-    
-    // Initialiser MLX
+    game->keys.w = 0;
+    game->keys.a = 0;
+    game->keys.s = 0;
+    game->keys.d = 0;
+    game->keys.left = 0;
+    game->keys.right = 0;
     init_mlx(game);
     
-    // Charger les textures
+    game->win = mlx_new_window(game->mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "cub3D");
+    if (!game->win)
+        error_exit("Window creation failed");
+    
+    game->img.img_ptr = mlx_new_image(game->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
+    game->img.addr = mlx_get_data_addr(game->img.img_ptr, &game->img.bits_per_pixel,
+                                        &game->img.line_length, &game->img.endian);
+    
     load_all_textures(game);
+    init_player_camera(game);
+    mlx_hook(game->win, 2, 1L<<0, key_press, game);
+    mlx_hook(game->win, 3, 1L<<1, key_release, game);      // Touches clavier
+    mlx_hook(game->win, 17, 0, close_game, game);        // Fermeture fenêtre (X)
+    mlx_loop_hook(game->mlx, render_frame, game);        // Rendu à chaque frame
     
-    printf("\n========================================\n");
-    printf("✅ EVERYTHING LOADED SUCCESSFULLY!\n");
-    printf("========================================\n");
-    printf("\n=== TEXTURES ===\n");
-    printf("North: %s (%dx%d)\n", game->textures.north_path,
-           game->textures.north_img.width, game->textures.north_img.height);
-    printf("South: %s (%dx%d)\n", game->textures.south_path,
-           game->textures.south_img.width, game->textures.south_img.height);
-    printf("West:  %s (%dx%d)\n", game->textures.west_path,
-           game->textures.west_img.width, game->textures.west_img.height);
-    printf("East:  %s (%dx%d)\n", game->textures.east_path,
-           game->textures.east_img.width, game->textures.east_img.height);
-    
-    printf("\n=== COLORS ===\n");
-    printf("Floor:   RGB(%d, %d, %d)\n",
-           (game->textures.floor_color >> 16) & 0xFF,
-           (game->textures.floor_color >> 8) & 0xFF,
-           game->textures.floor_color & 0xFF);
-    printf("Ceiling: RGB(%d, %d, %d)\n",
-           (game->textures.ceiling_color >> 16) & 0xFF,
-           (game->textures.ceiling_color >> 8) & 0xFF,
-           game->textures.ceiling_color & 0xFF);
-    
-    print_player_info(game);
-    print_map(game);
-    
-    printf("\n========================================\n");
-    
-    // Libérer tout
-    free_textures(game);
-    free_game(game);
+    mlx_loop(game->mlx);
     
     return (0);
 }

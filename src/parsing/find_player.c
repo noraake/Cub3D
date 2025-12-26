@@ -8,27 +8,15 @@ static int is_player_char(char c)
 static void set_player_direction(t_player *player, char orientation)
 {
     player->orientation = orientation;
-    
+
     if (orientation == 'N')
-    {
-        player->dir_x = 0;
-        player->dir_y = -1;
-    }
+        player->angle = -M_PI / 2;
     else if (orientation == 'S')
-    {
-        player->dir_x = 0;
-        player->dir_y = 1;
-    }
+        player->angle = M_PI / 2;
     else if (orientation == 'E')
-    {
-        player->dir_x = 1;
-        player->dir_y = 0;
-    }
+        player->angle = 0;
     else if (orientation == 'W')
-    {
-        player->dir_x = -1;
-        player->dir_y = 0;
-    }
+        player->angle = M_PI;
 }
 
 void find_player(t_game *game)
@@ -72,11 +60,6 @@ void find_player(t_game *game)
     
     if (player_count == 0)
         error_exit("No player found in map");
-    
-    printf("Player position: (%.1f, %.1f)\n", 
-           game->player.pos_x, game->player.pos_y);
-    printf("Player direction: (%.1f, %.1f)\n", 
-           game->player.dir_x, game->player.dir_y);
     
     printf("✅ Player initialized!\n");
 }

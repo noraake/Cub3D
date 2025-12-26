@@ -9,7 +9,27 @@
 # include <math.h>
 # include "../minilibx-linux/mlx.h"  // Ajouter MinilibX
 
+#define SCREEN_WIDTH 1920
+#define SCREEN_HEIGHT 1080
+#define MOVE_SPEED 0.03
+#define ROT_SPEED 0.03
+
 /* ========== STRUCTURES ========== */
+
+# ifndef M_PI
+#  define M_PI 3.14159265358979323846
+# endif
+
+typedef struct s_keys
+{
+    int w;
+    int a;
+    int s;
+    int d;
+    int left;
+    int right;
+}   t_keys;
+
 
 typedef struct s_img
 {
@@ -33,8 +53,8 @@ typedef struct s_player
 {
     double  pos_x;
     double  pos_y;
-    double  dir_x;
-    double  dir_y;
+    double  angle;
+    double  fov;
     char    orientation;
 }   t_player;
 
@@ -55,10 +75,34 @@ typedef struct s_textures
 typedef struct s_game
 {
     void        *mlx;        // Ajouter le pointeur MLX
+    void        *win;
+    t_img       img;
     t_map       map;
     t_player    player;
     t_textures  textures;
+    t_keys      keys; 
 }   t_game;
+
+typedef struct s_ray
+{
+    double  camera_x;      // Position x dans l'espace caméra
+    double  ray_dir_x;     // Direction x du rayon
+    double  ray_dir_y;     // Direction y du rayon
+    int     map_x;         // Position x sur la map
+    int     map_y;         // Position y sur la map
+    double  side_dist_x;   // Distance au prochain côté x
+    double  side_dist_y;   // Distance au prochain côté y
+    double  delta_dist_x;  // Distance entre chaque x
+    double  delta_dist_y;  // Distance entre chaque y
+    int     step_x;        // Direction du step (-1 ou 1)
+    int     step_y;        // Direction du step (-1 ou 1)
+    int     hit;           // Mur touché ?
+    int     side;          // Côté touché (NS=0, EW=1)
+    double  perp_wall_dist; // Distance perpendiculaire au mur
+    int     line_height;   // Hauteur de la ligne à dessiner
+    int     draw_start;    // Début du dessin
+    int     draw_end;      // Fin du dessin
+}   t_ray;
 
 /* ========== PARSING ========== */
 
@@ -93,5 +137,25 @@ char    *ft_strdup(char *str);
 char    *ft_strtrim(char *str);
 int     skip_spaces(char *str, int i);
 int     is_empty_line(char *line);
+
+/* ========== RENDERING ========== */
+void    put_pixel(t_img *img, int x, int y, int color);
+int     render_frame(t_game *game);
+void    draw_vertical_line(t_game *game, t_ray *ray, int x);
+
+/* ========== RAYCASTING ========== */
+void    cast_rays(t_game *game);
+
+/* ========== EVENTS ========== */
+int     key_press(int keycode, t_game *game);
+int     close_game(t_game *game);
+
+/* ========== PLAYER ========== */
+void    init_player_camera(t_game *game);
+/* ========== keyboard ========== */
+int key_press(int keycode, t_game *game);
+int close_game(t_game *game);
+void handle_movement(t_game *game);
+int key_release(int keycode, t_game *game);
 
 #endif

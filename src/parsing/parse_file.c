@@ -5,7 +5,7 @@ static void init_game(t_game *game)
     game->textures.north_path = NULL;
     game->textures.south_path = NULL;
     game->textures.east_path = NULL;
-    game->textures.east_path = NULL;
+    game->textures.west_path = NULL;
     game->textures.floor_color = -1;
     game->textures.ceiling_color = -1;
     game->map.grid = NULL;
