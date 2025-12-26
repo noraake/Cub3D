@@ -8,30 +8,35 @@
 #define KEY_RIGHT 65361
 #define KEY_ESC 65307
 
-
-static int is_walkable(t_game *game, double x, double y)
+static int is_valid_position(t_game *game, double x, double y)
 {
-    int map_x = (int)x;
-    int map_y = (int)y;
+    int map_x;
+    int map_y;
+    
+    map_x = (int)x;
+    map_y = (int)y;
 
     if (map_x < 0 || map_x >= game->map.width ||
         map_y < 0 || map_y >= game->map.height)
         return (0);
 
-    if (game->map.grid[map_y][map_x] == '1' ||
-        game->map.grid[map_y][map_x] == ' ')
+    if (game->map.grid[map_y][map_x] == '1')
         return (0);
 
+    if (game->map.grid[map_y][map_x] == ' ')
+        return (0);
+    
     return (1);
 }
 
-// ===== Déplacements =====
 static void move_forward(t_game *game)
 {
-    double new_x = game->player.pos_x + cos(game->player.angle) * MOVE_SPEED;
-    double new_y = game->player.pos_y + sin(game->player.angle) * MOVE_SPEED;
-
-    if (is_walkable(game, new_x, new_y))
+    double new_x;
+    double new_y;
+    
+    new_x = game->player.pos_x + cos(game->player.angle) * MOVE_SPEED;
+    new_y = game->player.pos_y + sin(game->player.angle) * MOVE_SPEED;
+    if (is_valid_position(game, new_x, new_y))
     {
         game->player.pos_x = new_x;
         game->player.pos_y = new_y;
@@ -40,10 +45,13 @@ static void move_forward(t_game *game)
 
 static void move_backward(t_game *game)
 {
-    double new_x = game->player.pos_x - cos(game->player.angle) * MOVE_SPEED;
-    double new_y = game->player.pos_y - sin(game->player.angle) * MOVE_SPEED;
+    double new_x;
+    double new_y;
+    
+    new_x = game->player.pos_x - cos(game->player.angle) * MOVE_SPEED;
+    new_y = game->player.pos_y - sin(game->player.angle) * MOVE_SPEED;
 
-    if (game->map.grid[(int)new_y][(int)new_x] != '1')
+    if (is_valid_position(game, new_x, new_y))
     {
         game->player.pos_x = new_x;
         game->player.pos_y = new_y;
@@ -52,12 +60,15 @@ static void move_backward(t_game *game)
 
 static void strafe_left(t_game *game)
 {
-    // Perpendiculaire = angle - 90°
-    double strafe_angle = game->player.angle - M_PI / 2;
-    double new_x = game->player.pos_x + cos(strafe_angle) * MOVE_SPEED;
-    double new_y = game->player.pos_y + sin(strafe_angle) * MOVE_SPEED;
+    double strafe_angle;
+    double new_x;
+    double new_y;
+    
+    strafe_angle = game->player.angle - M_PI / 2;
+    new_x = game->player.pos_x + cos(strafe_angle) * MOVE_SPEED;
+    new_y = game->player.pos_y + sin(strafe_angle) * MOVE_SPEED;
 
-    if (game->map.grid[(int)new_y][(int)new_x] != '1')
+    if (is_valid_position(game, new_x, new_y))
     {
         game->player.pos_x = new_x;
         game->player.pos_y = new_y;
@@ -66,18 +77,21 @@ static void strafe_left(t_game *game)
 
 static void strafe_right(t_game *game)
 {
-    double strafe_angle = game->player.angle + M_PI / 2;
-    double new_x = game->player.pos_x + cos(strafe_angle) * MOVE_SPEED;
-    double new_y = game->player.pos_y + sin(strafe_angle) * MOVE_SPEED;
+    double strafe_angle;
+    double new_x;
+    double new_y;
+    
+    strafe_angle = game->player.angle + M_PI / 2;
+    new_x = game->player.pos_x + cos(strafe_angle) * MOVE_SPEED;
+    new_y = game->player.pos_y + sin(strafe_angle) * MOVE_SPEED;
 
-    if (game->map.grid[(int)new_y][(int)new_x] != '1')
+    if (is_valid_position(game, new_x, new_y))
     {
         game->player.pos_x = new_x;
         game->player.pos_y = new_y;
     }
 }
 
-// ===== Rotation =====
 static void rotate_player(t_game *game, double rot_speed)
 {
     game->player.angle += rot_speed;
@@ -87,7 +101,6 @@ static void rotate_player(t_game *game, double rot_speed)
         game->player.angle -= 2 * M_PI;
 }
 
-// ===== Hooks =====
 int key_press(int keycode, t_game *game)
 {
     if (keycode == KEY_W) game->keys.w = 1;
@@ -111,9 +124,11 @@ int key_release(int keycode, t_game *game)
     return (0);
 }
 
-// ===== Appliquer mouvement =====
 void handle_movement(t_game *game)
 {
+    if (!game || !game->map.grid)
+        return;
+    
     if (game->keys.w) move_forward(game);
     if (game->keys.s) move_backward(game);
     if (game->keys.a) strafe_left(game);
@@ -122,7 +137,6 @@ void handle_movement(t_game *game)
     if (game->keys.right) rotate_player(game, -ROT_SPEED);
 }
 
-// ===== Fermer jeu =====
 int close_game(t_game *game)
 {
     free_textures(game);
