@@ -17,6 +17,9 @@ static void set_player_direction(t_player *player, char orientation)
         player->angle = 0;
     else if (orientation == 'W')
         player->angle = M_PI;
+
+    player->dir_x = cos(player->angle);
+    player->dir_y = sin(player->angle);
 }
 
 void find_player(t_game *game)

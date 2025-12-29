@@ -13,6 +13,10 @@ static void init_game(t_game *game)
     game->map.height = 0;
     game->player.pos_x = 0;
     game->player.pos_y = 0;
+    game->player.dir_x = 0.0;
+    game->player.dir_y = 0.0;
+    game->player.angle = 0.0;
+    game->player.orientation = 0;
 }
 
 static int parse_element(char *line, t_game *game)
@@ -25,11 +29,10 @@ static int parse_element(char *line, t_game *game)
     {
         if (trimmed)
             free(trimmed);
-        return (0); // Ligne vide, skip
+        return (0);
     }
     
     result = 0;
-    // Ajouter plus d'espaces possibles après l'identifiant
     if (trimmed[0] == 'N' && trimmed[1] == 'O' && (trimmed[2] == ' ' || trimmed[2] == '\t'))
         result = parse_north_texture(trimmed, &game->textures);
     else if (trimmed[0] == 'S' && trimmed[1] == 'O' && (trimmed[2] == ' ' || trimmed[2] == '\t'))
@@ -70,25 +73,18 @@ t_game *parse_file(char *filename)
     int     i;
     int     elements_count;
 
-    // Vérifier extension .cub
     if (ft_strlen(filename) < 4 || 
         strcmp(filename + ft_strlen(filename) - 4, ".cub") != 0)
         error_exit("File must have .cub extension");
-    
-    // Lire tout le fichier
     file_content = read_file(filename);
-    
-    // Initialiser la structure
     game = malloc(sizeof(t_game));
     if (!game)
         error_exit("Malloc failed");
     init_game(game);
-    
-    // Parser les éléments (textures et couleurs)
     printf("\n=== PARSING ELEMENTS ===\n");
     i = 0;
     elements_count = 0;
-    while (file_content[i] && elements_count < 6) // On attend 6 éléments (4 textures + 2 couleurs)
+    while (file_content[i] && elements_count < 6)
     {
         if (parse_element(file_content[i], game))
         {
