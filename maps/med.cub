@@ -1,10 +1,9 @@
-NO ./textures/north.xpm
-SO ./textures/south.xpm
-WE ./textures/west.xpm
-EA ./textures/east.xpm
-
-F 50,50,50
-C 150,200,255
+NO ./textures/brick.xpm
+SO ./textures/stone.xpm
+WE ./textures/wood.xpm
+EA ./textures/metal.xpm
+F 45,25,10
+C 100,180,220
 
 11111111111111111
 10000000000000001
@@ -14,4 +13,4 @@ C 150,200,255
 10000100010000001
 10000100010000001
 10000000000E00001
-1111111111111111
+11111111111111111

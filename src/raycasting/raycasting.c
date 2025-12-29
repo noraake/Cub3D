@@ -2,11 +2,11 @@
 
 static void init_ray(t_ray *ray, t_game *game, int x)
 {
-    double ray_angle;
-    ray_angle = game->player.angle - (game->player.fov / 2) + 
+    // double ray_angle;
+    ray->angle = game->player.angle - (game->player.fov / 2) + 
                 (x * game->player.fov / SCREEN_WIDTH);
-    ray->ray_dir_x = cos(ray_angle);
-    ray->ray_dir_y = sin(ray_angle);
+    ray->ray_dir_x = cos(ray->angle);
+    ray->ray_dir_y = sin(ray->angle);
     ray->map_x = (int)game->player.pos_x;
     ray->map_y = (int)game->player.pos_y;
     ray->delta_dist_x = fabs(1 / ray->ray_dir_x);
@@ -75,7 +75,7 @@ static void calculate_wall_height(t_ray *ray, t_game *game)
     else
         ray->perp_wall_dist = (ray->map_y - game->player.pos_y + 
                                (1 - ray->step_y) / 2) / ray->ray_dir_y;
-    
+    ray->perp_wall_dist *= cos(ray->angle - game->player.angle);
     ray->line_height = (int)(SCREEN_HEIGHT / ray->perp_wall_dist);
     ray->draw_start = -ray->line_height / 2 + SCREEN_HEIGHT / 2;
     

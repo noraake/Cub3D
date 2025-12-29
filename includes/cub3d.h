@@ -103,7 +103,8 @@ typedef struct s_ray
     double  perp_wall_dist; // Distance perpendiculaire au mur
     int     line_height;   // Hauteur de la ligne à dessiner
     int     draw_start;    // Début du dessin
-    int     draw_end;      // Fin du dessin
+    int     draw_end;  
+    double  angle;    // Fin du dessin
 }   t_ray;
 
 /* ========== PARSING ========== */
