@@ -43,18 +43,6 @@ static void move_forward(t_game *game)
     }
 }
 
-// static void move_forward(t_game *game)
-// {
-//     double new_x = game->player.pos_x + cos(game->player.angle) * MOVE_SPEED;
-//     double new_y = game->player.pos_y + sin(game->player.angle) * MOVE_SPEED;
-
-//     if (game->map.grid[(int)new_y][(int)new_x] != '1')
-//     {
-//         game->player.pos_x = new_x;
-//         game->player.pos_y = new_y;
-//     }
-// }
-
 static void move_backward(t_game *game)
 {
     double new_x;
