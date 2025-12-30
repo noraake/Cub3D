@@ -26,7 +26,7 @@ static char *read_line(int fd)
     int     i;
     int     ret;
 
-    line = malloc(1000); // Buffer temporaire
+    line = malloc(1000);
     if (!line)
         return (NULL);
     i = 0;
@@ -55,15 +55,12 @@ char **read_file(char *filename)
     total_lines = count_lines(filename);
     if (total_lines < 0)
         error_exit("Cannot open file");
-    
     lines = malloc(sizeof(char *) * (total_lines + 1));
     if (!lines)
         error_exit("Malloc failed");
-    
     fd = open(filename, O_RDONLY);
     if (fd < 0)
         error_exit("Cannot open file");
-    
     i = 0;
     while (i < total_lines)
     {

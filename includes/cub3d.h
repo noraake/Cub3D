@@ -7,7 +7,7 @@
 # include <stdio.h>
 # include <string.h>
 # include <math.h>
-# include "../minilibx-linux/mlx.h"  // Ajouter MinilibX
+# include "../minilibx-linux/mlx.h"
 
 #define SCREEN_WIDTH 1920
 #define SCREEN_HEIGHT 1080

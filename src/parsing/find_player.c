@@ -29,7 +29,6 @@ void find_player(t_game *game)
     int     player_count;
 
     printf("\n=== FINDING PLAYER ===\n");
-    
     player_count = 0;
     y = 0;
     while (y < game->map.height)
@@ -42,27 +41,18 @@ void find_player(t_game *game)
                 player_count++;
                 if (player_count > 1)
                     error_exit("Multiple players found in map");
-                
-                // Position du joueur (centre de la case)
                 game->player.pos_x = x + 0.5;
                 game->player.pos_y = y + 0.5;
-                
-                // Direction selon l'orientation
-                set_player_direction(&game->player, game->map.grid[y][x]);
-                
+                set_player_direction(&game->player, game->map.grid[y][x]);   
                 printf("Player found at (%d, %d) facing %c\n", 
                        x, y, game->map.grid[y][x]);
-                
-                // Remplacer par '0' dans la map
                 game->map.grid[y][x] = '0';
             }
             x++;
         }
         y++;
     }
-    
     if (player_count == 0)
         error_exit("No player found in map");
-    
-    printf("✅ Player initialized!\n");
+    printf("Player initialized!\n");
 }

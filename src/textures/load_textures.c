@@ -32,7 +32,7 @@ void load_all_textures(t_game *game)
     game->textures.east_img = load_texture(game->mlx, game->textures.east_path);
     game->textures.west_img = load_texture(game->mlx, game->textures.west_path);
     
-    printf("✅ All textures loaded successfully!\n");
+    printf("All textures loaded successfully!\n");
 }
 
 int get_texture_pixel(t_img *img, int x, int y)

@@ -31,7 +31,6 @@ static int parse_element(char *line, t_game *game)
             free(trimmed);
         return (0);
     }
-    
     result = 0;
     if (trimmed[0] == 'N' && trimmed[1] == 'O' && (trimmed[2] == ' ' || trimmed[2] == '\t'))
         result = parse_north_texture(trimmed, &game->textures);
@@ -45,7 +44,6 @@ static int parse_element(char *line, t_game *game)
         result = parse_floor_color(trimmed, &game->textures);
     else if (trimmed[0] == 'C' && (trimmed[1] == ' ' || trimmed[1] == '\t'))
         result = parse_ceiling_color(trimmed, &game->textures);
-    
     free(trimmed);
     return (result);
 }
@@ -66,57 +64,49 @@ static void check_all_elements(t_game *game)
         error_exit("Missing C (ceiling) color");
 }
 
-t_game *parse_file(char *filename)
+int parse_elements(char **file_content, t_game **game)
 {
-    t_game  *game;
-    char    **file_content;
-    int     i;
-    int     elements_count;
+    int i;
+    int elements_count;
 
-    if (ft_strlen(filename) < 4 || 
-        strcmp(filename + ft_strlen(filename) - 4, ".cub") != 0)
-        error_exit("File must have .cub extension");
-    file_content = read_file(filename);
-    game = malloc(sizeof(t_game));
-    if (!game)
+    *game = malloc(sizeof(t_game));
+    if (!(*game))
         error_exit("Malloc failed");
-    init_game(game);
+    init_game(*game);
     printf("\n=== PARSING ELEMENTS ===\n");
     i = 0;
     elements_count = 0;
     while (file_content[i] && elements_count < 6)
     {
-        if (parse_element(file_content[i], game))
-        {
+        if (parse_element(file_content[i], *game))
             elements_count++;
-        }
         i++;
     }
-    
-    // Vérifier que tous les éléments sont présents
-    check_all_elements(game);
-    
-    // Trouver où commence la map (première ligne non-vide après les éléments)
+    check_all_elements(*game);
     while (file_content[i] && is_empty_line(file_content[i]))
         i++;
-    
     if (!file_content[i])
         error_exit("No map found in file");
-    
     printf("\n=== MAP STARTS AT LINE %d ===\n", i);
-    
-    // Parser la map
-    parse_map(game, file_content, i);
+    return i;
+}
 
-    // Trouver et initialiser le joueur
+t_game *parse_file(char *filename)
+{
+    t_game  *game;
+    char    **file_content;
+    int     map_start_index;
+    int     i;
+
+    if (ft_strlen(filename) < 4 || 
+        strcmp(filename + ft_strlen(filename) - 4, ".cub") != 0)
+        error_exit("File must have .cub extension");
+    file_content = read_file(filename);
+    map_start_index = parse_elements(file_content, &game);
+    parse_map(game, file_content, map_start_index);
     find_player(game);
-
-    // Valider que la map est fermée
     validate_map(game);
-    
-    printf("\n✅ All elements parsed successfully!\n\n");
-
-    // Free file_content (on en a plus besoin)
+    printf("\nAll elements parsed successfully!\n\n");
     i = 0;
     while (file_content[i])
     {
@@ -124,6 +114,5 @@ t_game *parse_file(char *filename)
         i++;
     }
     free(file_content);
-    
-    return (game);
+    return game;
 }

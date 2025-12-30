@@ -60,6 +60,7 @@ static void move_backward(t_game *game)
 
 static void strafe_left(t_game *game)
 {
+<<<<<<< HEAD
     double strafe_angle;
     double new_x;
     double new_y;
@@ -67,6 +68,11 @@ static void strafe_left(t_game *game)
     strafe_angle = game->player.angle - M_PI / 2;
     new_x = game->player.pos_x + cos(strafe_angle) * MOVE_SPEED;
     new_y = game->player.pos_y + sin(strafe_angle) * MOVE_SPEED;
+=======
+    double strafe_angle = game->player.angle - M_PI / 2;
+    double new_x = game->player.pos_x + cos(strafe_angle) * MOVE_SPEED;
+    double new_y = game->player.pos_y + sin(strafe_angle) * MOVE_SPEED;
+>>>>>>> 0310ac6363c0dcbf32665da295d94871069f2753
 
     if (is_valid_position(game, new_x, new_y))
     {
@@ -103,24 +109,39 @@ static void rotate_player(t_game *game, double rot_speed)
 
 int key_press(int keycode, t_game *game)
 {
-    if (keycode == KEY_W) game->keys.w = 1;
-    if (keycode == KEY_S) game->keys.s = 1;
-    if (keycode == KEY_A) game->keys.a = 1;
-    if (keycode == KEY_D) game->keys.d = 1;
-    if (keycode == KEY_LEFT) game->keys.left = 1;
-    if (keycode == KEY_RIGHT) game->keys.right = 1;
-    if (keycode == KEY_ESC) close_game(game);
+    if (keycode == KEY_W) 
+        game->keys.w = 1;
+    if (keycode == KEY_S)
+        game->keys.s = 1;
+    if (keycode == KEY_A) 
+        game->keys.a = 1;
+
+    if (keycode == KEY_D)
+        game->keys.d = 1;
+    if (keycode == KEY_LEFT)
+        game->keys.left = 1;
+    if (keycode == KEY_RIGHT)
+        game->keys.right = 1;
+    if (keycode == KEY_ESC)
+        close_game(game);
     return (0);
 }
 
 int key_release(int keycode, t_game *game)
 {
-    if (keycode == KEY_W) game->keys.w = 0;
-    if (keycode == KEY_S) game->keys.s = 0;
-    if (keycode == KEY_A) game->keys.a = 0;
-    if (keycode == KEY_D) game->keys.d = 0;
-    if (keycode == KEY_LEFT) game->keys.left = 0;
-    if (keycode == KEY_RIGHT) game->keys.right = 0;
+    if (keycode == KEY_W)
+        game->keys.w = 0;
+    if (keycode == KEY_S)
+        game->keys.s = 0;
+    if (keycode == KEY_A)
+        game->keys.a = 0;
+    if (keycode == KEY_D)
+        game->keys.d = 0;
+    if (keycode == KEY_LEFT)
+        game->keys.left = 0;
+    if (keycode == KEY_RIGHT)
+        game->keys.right = 0;
+
     return (0);
 }
 
@@ -137,6 +158,10 @@ void handle_movement(t_game *game)
     if (game->keys.right) rotate_player(game, -ROT_SPEED);
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0310ac6363c0dcbf32665da295d94871069f2753
 int close_game(t_game *game)
 {
     free_textures(game);

@@ -39,12 +39,10 @@ OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 all: $(MLX_LIB) $(NAME)
 
 $(MLX_LIB):
-	@echo "Compiling MinilibX..."
 	@make -C $(MLX_DIR)
 
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) $(MLX_FLAGS) -o $(NAME)
-	@echo "✅ cub3D compiled successfully!"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
