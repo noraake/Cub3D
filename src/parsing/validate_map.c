@@ -61,26 +61,15 @@ static void free_map_copy(char **map, int height)
 
 static void flood_fill(char **map, int x, int y, int width, int height)
 {
-    // Si hors limites, c'est une erreur (map ouverte)
     if (x < 0 || x >= width || y < 0 || y >= height)
         error_exit("Map is not closed (player can escape)");
-    
-    // Si c'est un mur, on s'arrête
     if (map[y][x] == '1')
         return;
-    
-    // Si c'est un espace en bordure ou hors map, erreur
     if (map[y][x] == ' ')
         error_exit("Map is not closed (space found in path)");
-    
-    // Si déjà visité, on s'arrête
     if (map[y][x] == 'V')
         return;
-    
-    // Marquer comme visité
     map[y][x] = 'V';
-    
-    // Remplir récursivement dans les 4 directions
     flood_fill(map, x + 1, y, width, height);
     flood_fill(map, x - 1, y, width, height);
     flood_fill(map, x, y + 1, width, height);
@@ -92,7 +81,6 @@ static void check_borders(t_game *game)
     int x;
     int y;
 
-    // Vérifier première et dernière ligne
     y = 0;
     while (y < game->map.height)
     {
@@ -108,8 +96,6 @@ static void check_borders(t_game *game)
         }
         y++;
     }
-    
-    // Vérifier première et dernière colonne
     x = 0;
     while (x < game->map.width)
     {
@@ -134,30 +120,16 @@ void validate_map(t_game *game)
     int     start_y;
 
     printf("\n=== VALIDATING MAP ===\n");
-    
-    // Vérifier que tous les caractères sont valides
     check_valid_characters(game);
     printf("✓ All characters valid\n");
-    
-    // Vérifier les bordures
     check_borders(game);
     printf("✓ Borders checked\n");
-    
-    // Copier la map pour le flood fill
     map_copy = copy_map(game);
-    
-    // Position de départ du flood fill (position du joueur)
     start_x = (int)game->player.pos_x;
     start_y = (int)game->player.pos_y;
-    
     printf("Starting flood fill from (%d, %d)\n", start_x, start_y);
-    
-    // Lancer le flood fill
     flood_fill(map_copy, start_x, start_y, game->map.width, game->map.height);
-    
-    // Libérer la copie
     free_map_copy(map_copy, game->map.height);
-    
     printf("✓ Map is closed (flood fill successful)\n");
-    printf("✅ Map validation complete!\n");
+    printf("Map validation complete!\n");
 }

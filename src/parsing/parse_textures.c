@@ -6,28 +6,20 @@ static char *extract_path(char *line, int start)
     int     len;
     char    *path;
 
-    // Skip espaces après l'identifiant
     i = skip_spaces(line, start);
-    
-    // Calculer longueur du chemin
     len = 0;
     while (line[i + len] && line[i + len] != ' ' && 
            line[i + len] != '\t' && line[i + len] != '\n')
         len++;
-    
     if (len == 0)
         return (NULL);
-    
-    // Extraire le chemin
     path = malloc(sizeof(char) * (len + 1));
     if (!path)
         return (NULL);
-    
     len = 0;
     while (line[i] && line[i] != ' ' && line[i] != '\t' && line[i] != '\n')
         path[len++] = line[i++];
     path[len] = '\0';
-    
     return (path);
 }
 

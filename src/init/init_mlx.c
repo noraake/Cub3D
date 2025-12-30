@@ -7,6 +7,5 @@ void init_mlx(t_game *game)
     game->mlx = mlx_init();
     if (!game->mlx)
         error_exit("MLX initialization failed");
-    
-    printf("✅ MLX initialized successfully!\n");
+    printf("MLX initialized successfully!\n");
 }
